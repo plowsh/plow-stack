@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+if [[ ! -f renv/activate.R ]]; then
+   exit 1
+fi
+
+exit 0

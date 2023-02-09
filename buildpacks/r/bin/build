@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+echo "---> R buildpack"
+
+layersdir="$1"
+rbaselayer="$layersdir"/r-base
+mkdir -p "$rbaselayer"
+
+R_VERSION=4.2.2
+
+echo "---> Downloading and extracting R (${R_VERSION})"
+pushd "$rbaselayer"
+curl -sSf -O https://cdn.posit.co/r/ubuntu-2204/pkgs/r-${R_VERSION}_1_amd64.deb
+dpkg -x r-${R_VERSION}_1_amd64.deb .
+popd
+
+echo "--> Rewriting R_HOME"
+sed -i -r -e "s%(/opt/R/$R_VERSION)%$rbaselayer\1%g" $rbaselayer/opt/R/${R_VERSION}/bin/R
+sed -i -r -e "s%(/opt/R/$R_VERSION)%$rbaselayer\1%g" $rbaselayer/opt/R/${R_VERSION}/lib/R/bin/R
+sed -i -r -e "s%(/opt/R/$R_VERSION)%$rbaselayer\1%g" $rbaselayer/opt/R/${R_VERSION}/lib/pkgconfig/libR.pc
+
+echo -e '[types]\nlaunch = true\ncache = true\nbuild = true' > "$layersdir/r-base.toml"
+
+exit 0

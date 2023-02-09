@@ -1,0 +1,8 @@
+api = "0.8"
+
+[buildpack]
+  id = "plow/r"
+  version = "0.1.0"
+
+[[stacks]]
+  id = "com.lytol.plow.ubuntu22"
