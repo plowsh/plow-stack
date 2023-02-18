@@ -1,5 +1,5 @@
 .PHONY: all
-all: stacks builder
+all: stacks builder examples
 
 .PHONY: stacks
 stacks:
@@ -13,5 +13,5 @@ builder:
 .PHONY: examples
 examples: examples/*
 	for dir in $^ ; do \
-		pack build $$(basename $$dir) --path $${dir} --builder plow/builder:ubuntu22; \
+		pack build plow/example-$$(basename $$dir) --path $${dir} --builder plow/builder:ubuntu22; \
 	done

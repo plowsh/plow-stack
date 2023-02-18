@@ -21,6 +21,11 @@ sed -i -r -e "s%(/opt/R/$R_VERSION)%$rbaselayer\1%g" $rbaselayer/opt/R/${R_VERSI
 sed -i -r -e "s%(/opt/R/$R_VERSION)%$rbaselayer\1%g" $rbaselayer/opt/R/${R_VERSION}/lib/R/bin/R
 sed -i -r -e "s%(/opt/R/$R_VERSION)%$rbaselayer\1%g" $rbaselayer/opt/R/${R_VERSION}/lib/pkgconfig/libR.pc
 
+echo "--> Symlink R binaries"
+mkdir -p $rbaselayer/bin
+ln -s $rbaselayer/opt/R/${R_VERSION}/bin/R $rbaselayer/bin/R
+ln -s $rbaselayer/opt/R/${R_VERSION}/bin/Rscript $rbaselayer/bin/Rscript
+
 echo -e '[types]\nlaunch = true\ncache = true\nbuild = true' > "$layersdir/r-base.toml"
 
 exit 0
