@@ -12,6 +12,12 @@ Quickstart
 * `plow deploy` - Deploy your current project to a plow-supported service
 
 
+Development
+-----------
+
+See Makefile
+
+
 Ideas
 -----
 

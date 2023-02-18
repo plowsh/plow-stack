@@ -9,3 +9,9 @@ stacks:
 .PHONY: builder
 builder:
 	pack builder create plow/builder:ubuntu22 --config ./builder/builder.toml
+
+.PHONY: examples
+examples: examples/*
+	for dir in $^ ; do \
+		pack build $$(basename $$dir) --path $${dir} --builder plow/builder:ubuntu22; \
+	done
