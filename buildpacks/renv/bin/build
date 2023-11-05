@@ -2,10 +2,18 @@
 
 set -euo pipefail
 
-echo "---> renv buildpack"
+echo "= renv buildpack"
 
 layers_dir="$1"
 env_dir="$2/env"
 plan_path="$3"
+
+export PATH=$PATH:$layers_dir/r-base/bin
+
+echo "- Install renv"
+Rscript -e 'install.packages("renv")'
+
+echo "- Install packages using renv"
+
 
 exit 0

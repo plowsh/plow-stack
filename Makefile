@@ -1,17 +1,21 @@
-.PHONY: all
-all: stacks builder examples
+PLATFORM=avocado
+BUILDER_IMAGE=plow-builder
+EXAMPLE_PREFIX=plow-example
 
-.PHONY: stacks
-stacks:
-	docker build stacks/ubuntu22/ --target build -t plow/stack-ubuntu22:build
-	docker build stacks/ubuntu22/ --target run -t plow/stack-ubuntu22:run
+.PHONY: all
+all: base-images builder
+
+.PHONY: base-images
+base-images:
+	./scripts/build.sh -t $(PLATFORM)
 
 .PHONY: builder
 builder:
-	pack builder create plow/builder:ubuntu22 --config ./builder/builder.toml
+	pack builder create $(BUILDER_IMAGE):$(PLATFORM) --config ./builder.toml
 
 .PHONY: examples
 examples: examples/*
-	for dir in $^ ; do \
-		pack build plow/example-$$(basename $$dir) --path $${dir} --builder plow/builder:ubuntu22; \
+	@for dir in $^ ; do \
+		echo "Building example: $$(basename $$dir)"; \
+		pack build $(EXAMPLE_PREFIX)-$$(basename $$dir):$(PLATFORM) --path $${dir} --builder $(BUILDER_IMAGE):$(PLATFORM); \
 	done

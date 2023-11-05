@@ -1,24 +1,7 @@
-Plow
-====
+Plow Stack
+==========
 
-Manage your development environment using buildpacks
+Each plow stack is an end-to-end [Cloud Native
+Buildback](https://buildpacks.io/) platform curated specifically for use with
+plow.
 
-
-Quickstart
-----------
-
-* `plow run` - Run your current project locally
-* `plow build` - Build your current project into an OCI
-* `plow deploy` - Deploy your current project to a plow-supported service
-
-
-Development
------------
-
-See Makefile
-
-
-Ideas
------
-
-* `plow create` - Create a project template for a specific app type
