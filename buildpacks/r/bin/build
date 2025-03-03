@@ -2,32 +2,48 @@
 
 set -euo pipefail
 
+DEFAULT_R_VERSION=4.3.2
+
 echo "= R buildpack"
 
 layersdir="$1"
 rbaselayer="$layersdir"/r-base
 mkdir -p "$rbaselayer"
 
-R_VERSION=4.2.2
+echo '- Detecting R version'
+
+if [ -f renv.lock ]; then
+  R_VERSION=$(jq -r '.R.Version // "${DEFAULT_R_VERSION}"' renv.lock)
+  echo "-- Using renv.lock R version ${R_VERSION}"
+else
+  R_VERSION=$DEFAULT_R_VERSION
+  echo "-- Using default R version ${R_VERSION}"
+fi
 
 echo "- Install R ${R_VERSION}"
 
-echo "-- Downloading and extracting"
-pushd "$rbaselayer"
-curl -sSf -O https://cdn.posit.co/r/ubuntu-2204/pkgs/r-${R_VERSION}_1_amd64.deb
-dpkg -x r-${R_VERSION}_1_amd64.deb .
-popd
+get_download_url() {
+  local version=$1
+  local major_version
+  major_version="$(echo "$version" | cut -d. -f1)"
+  echo "https://cloud.r-project.org/src/base/R-${major_version}/R-${version}.tar.gz"
+}
 
-echo "-- Rewriting R_HOME"
-sed -i -r -e "s%(/opt/R/$R_VERSION)%$rbaselayer\1%g" $rbaselayer/opt/R/${R_VERSION}/bin/R
-sed -i -r -e "s%(/opt/R/$R_VERSION)%$rbaselayer\1%g" $rbaselayer/opt/R/${R_VERSION}/lib/R/bin/R
-sed -i -r -e "s%(/opt/R/$R_VERSION)%$rbaselayer\1%g" $rbaselayer/opt/R/${R_VERSION}/lib/pkgconfig/libR.pc
+download_url=$(get_download_url "$R_VERSION")
+echo "-- Downloading and extracting from ${download_url}"
+wget -q -O - "$download_url" | tar -xzf -
 
-echo "-- Symlink R binaries"
-mkdir -p $rbaselayer/bin
-ln -fs $rbaselayer/opt/R/${R_VERSION}/bin/R $rbaselayer/bin/R
-ln -fs $rbaselayer/opt/R/${R_VERSION}/bin/Rscript $rbaselayer/bin/Rscript
+(
+    cd "R-${R_VERSION}" || exit
 
-echo -e '[types]\nlaunch = true\ncache = true\nbuild = true' > "$layersdir/r-base.toml"
+    echo "-- Configure"
+    ./configure --prefix=$rbaselayer || exit 1
+    echo "-- Build"
+    make || exit 1
+    echo "-- Install"
+    make install || exit 1
+  )
+
+echo -e '[types]\nlaunch = true\ncache=true\nbuild = true' > "$layersdir/r-base.toml"
 
 exit 0

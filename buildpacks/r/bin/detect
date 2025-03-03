@@ -2,12 +2,9 @@
 
 set -eo pipefail
 
-if [ -f packrat/init.R ]; then
-  echo "R (packrat)"
-elif [ -f renv/activate.R ]; then
+if [ -f renv.lock ]; then
   echo "R (renv)"
-else
-  exit 1
+  exit 0
 fi
 
-exit 0
+exit 1

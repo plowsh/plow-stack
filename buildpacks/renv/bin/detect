@@ -2,8 +2,8 @@
 
 set -eo pipefail
 
-if [[ ! -f renv/activate.R ]]; then
-   exit 1
+if [[ -f renv.lock ]]; then
+   exit 0
 fi
 
-exit 0
+exit 1
