@@ -10,7 +10,7 @@ TODO
 ----
 
 - [ ] R buildpack
-    - [ ] Caching?
+    - [ ] Caching
 - [ ] Renv buildpack
     - [ ] Install the version of renv in renv/activate.R
     - [ ] Are the packages available to the next buildpack?
@@ -18,3 +18,8 @@ TODO
 - [ ] Rmarkdown buildpack
 - [ ] Plumber buildpack
 - [ ] Python buildpack
+    - [ ] Use version from .python-version
+    - [ ] Install dependencies from requirements.txt
+    - [ ] Caching
+- [ ] Flask buildpack
+

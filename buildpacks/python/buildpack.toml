@@ -1,0 +1,8 @@
+api = "0.10"
+
+[buildpack]
+  id = "plow/python"
+  version = "0.1.0"
+
+[[targets]]
+  os = "linux"

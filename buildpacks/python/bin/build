@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# uv
+
+uv_layer="${CNB_LAYERS_DIR}"/uv
+mkdir -p "${uv_layer}"/bin
+export PATH="${uv_layer}"/bin:$PATH
+
+echo "---> Downloading and extracting uv"
+uv_version="0.6.5"
+uv_url=https://github.com/astral-sh/uv/releases/download/${uv_version}/uv-x86_64-unknown-linux-musl.tar.gz
+wget -q -O - "${uv_url}" | tar -xzf - --strip-components 1 -C "${uv_layer}"/bin
+
+cat > "${CNB_LAYERS_DIR}/uv.toml" << EOL
+[types]
+build = true
+launch = true
+EOL
+
+# Python
+
+python_layer="${CNB_LAYERS_DIR}"/python
+mkdir -p "${python_layer}"/bin "${python_layer}"/shared
+export PATH="${python_layer}"/bin:$PATH
+
+echo "---> Installing Python"
+python_version="3.13.2"
+export UV_PYTHON_INSTALL_DIR="${python_layer}"/shared
+export UV_PYTHON_BIN_DIR="${python_layer}"/bin
+uv python install ${python_version} --preview --default
+
+cat > "${CNB_LAYERS_DIR}/python.toml" << EOL
+[types]
+build = true
+launch = true
+EOL
+
+exit 0

@@ -1,3 +1,7 @@
+[[targets]]
+  os = "linux"
+  arch = "amd64"
+
 [[buildpacks]]
 id = "plow/r"
 uri = "./buildpacks/r"
@@ -13,19 +17,29 @@ id = "plow/shiny"
 uri = "./buildpacks/shiny"
 version = "0.1.0"
 
+[[buildpacks]]
+id = "plow/python"
+uri = "./buildpacks/python"
+version = "0.1.0"
+
 [[order]]
-[[order.group]]
-id = "plow/r"
-version = "0.1.0"
+  [[order.group]]
+  id = "plow/r"
+  version = "0.1.0"
 
-[[order.group]]
-id = "plow/renv"
-version = "0.1.0"
-optional = true
+  [[order.group]]
+  id = "plow/renv"
+  version = "0.1.0"
+  optional = true
 
-[[order.group]]
-id = "plow/shiny"
-version = "0.1.0"
+  [[order.group]]
+  id = "plow/shiny"
+  version = "0.1.0"
+
+[[order]]
+  [[order.group]]
+  id = "plow/python"
+  version = "0.1.0"
 
 [build]
 image = "plow-build:avocado"

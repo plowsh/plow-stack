@@ -22,6 +22,10 @@ builder:
 .PHONY: examples
 examples: examples/*
 	@for dir in $^ ; do \
-		echo "Building example: $$(basename $$dir)"; \
-		pack build $(EXAMPLE_PREFIX)-$$(basename $$dir):$(PLATFORM) --path $${dir} --builder $(BUILDER_IMAGE):$(PLATFORM); \
+		make $$(dir)
 	done
+
+.PHONY: examples/*
+examples/*:
+	@echo "Building example: $(notdir $@)"
+	pack build $(EXAMPLE_PREFIX)-$(notdir $@):$(PLATFORM) --path $@ --builder $(BUILDER_IMAGE):$(PLATFORM)
