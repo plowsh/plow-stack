@@ -2,7 +2,7 @@ Plow Stack
 ==========
 
 Each plow stack is an end-to-end [Cloud Native
-Buildback](https://buildpacks.io/) platform curated specifically for use with
+Buildback](https://buildpacks.io/) builder curated specifically for use with
 plow.
 
 
@@ -22,4 +22,5 @@ TODO
     - [ ] Install dependencies from requirements.txt
     - [ ] Caching
 - [ ] Flask buildpack
+- [ ] Publish builder in CI
 

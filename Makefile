@@ -2,11 +2,13 @@ PLATFORM=avocado
 BUILDER_IMAGE=plow-builder
 EXAMPLE_PREFIX=plow-example
 
+PACK_VERSION=0.36.4
+
 install: bin/pack
 
 bin/pack:
 	@mkdir -p bin
-	@curl -sSL https://github.com/buildpacks/pack/releases/download/v0.35.1/pack-v0.35.1-linux.tgz | tar -xz -C bin pack
+	@curl -sSL https://github.com/buildpacks/pack/releases/download/v$(PACK_VERSION)/pack-v$(PACK_VERSION)-linux.tgz | tar -xz -C bin pack
 
 .PHONY: all
 all: install base-images builder examples
